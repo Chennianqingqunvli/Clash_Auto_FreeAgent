@@ -1,0 +1,17 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+
+# Environments
+.env
+.env.*
+.venv/
+venv/
+env/
+
+# Editor/OS
+.DS_Store
+.idea/
+
+# Generated output
+*.yaml

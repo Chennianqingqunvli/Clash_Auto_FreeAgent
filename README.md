@@ -1,2 +1,52 @@
-# Clash_Auto_FreeAgent
-这个项目是一个轻量级的 IP2FREE 辅助工具：用 Python 登录 IP2FREE 接口，自动拉取最新的免费代理列表，生成符合 Clash 配置格式的 YAML 并保存到桌面（按日期命名）。内置的 HTML 和 JS 文件是从 IP2FREE 官网保存的快照，便于参考界面结构。运行前只需在环境变量里设置 IP2FREE_EMAIL 和 IP2FREE_PASSWORD，执行 python ip2free_agent.py 即可生成可直接使用的代理配置，同时仓库已忽略生成的 YAML，避免误提交敏感信息。
+# IP2FREE Agent
+
+Small Python helper that logs into IP2FREE, pulls the free proxy list, and writes a Clash-style YAML to your desktop (`YYYY-MM-DD.yaml`). A few saved HTML pages (`login.html`, `tmp_login_after.html`, `dashboard.html`) and JS chunks are included as snapshots of the IP2FREE UI.
+
+## Prerequisites
+- Python 3.9+
+- Install dependencies: `pip install -r requirements.txt`
+
+## Configuration
+Set your IP2FREE account credentials via environment variables before running:
+
+```powershell
+$env:IP2FREE_EMAIL="your-email@example.com"
+$env:IP2FREE_PASSWORD="your-password"
+```
+
+## Usage
+Run the agent; it will print where the YAML was written:
+
+```powershell
+python ip2free_agent.py
+```
+
+The file is placed on your desktop and includes all available free proxies as a selectable group. The YAML contains the usernames and passwords returned by IP2FREE—treat it as a secret.
+
+Example snippet:
+
+```yaml
+proxies:
+  - name: "ip2free-US-New_York-123"
+    type: socks5
+    server: 203.0.113.10
+    port: 1080
+    username: user
+    password: pass
+
+proxy-groups:
+  - name: "PROXY"
+    type: select
+    proxies:
+      - "ip2free-US-New_York-123"
+      - DIRECT
+```
+
+## Notes
+- To fetch more or fewer pages, tweak the defaults in `_fetch_free_ips` inside `ip2free_agent.py`.
+- Generated YAML files are ignored by Git via `.gitignore` to avoid accidentally committing secrets.
+
+## Repository contents
+- `ip2free_agent.py`: the agent script that calls the IP2FREE API and builds the Clash YAML.
+- `login.html`, `tmp_login_after.html`, `dashboard.html`: saved IP2FREE pages for reference.
+- `chunk_6074.js`, `chunk_9346.js`, `layout.js`, `login_chunk.js`: JS bundles saved from the IP2FREE site.
